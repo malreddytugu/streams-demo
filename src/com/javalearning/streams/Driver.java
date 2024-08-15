@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.javalearning.streams.model.Employee;
-import com.javalearning.streams.model.EmployeeDto;
-
 public class Driver {
 	public static void main(String[] args) {
 		
