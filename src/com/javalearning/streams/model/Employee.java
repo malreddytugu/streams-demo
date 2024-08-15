@@ -39,7 +39,8 @@ public class Employee {
 		employees.add(new Employee(104, "Keerthi Kumar", 150000));
 		employees.add(new Employee(109, "Nasira", 200000));
 		employees.add(new Employee(103, "Kanil", 105000));
-		employees.add(new Employee(103, "Anusha", 250000));
+		employees.add(new Employee(105, "Anusha", 250000));
+		employees.add(new Employee(101, "Malreddy", 100000));
 		return employees;
 
 	}
