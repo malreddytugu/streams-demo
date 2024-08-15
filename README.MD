@@ -6,3 +6,4 @@ This is simple java stand alone project to learn streams.
 4.Create an Employee class having long id, String name, 
 double salary attributes.
 5.create a method to return the List<Employee>
+
