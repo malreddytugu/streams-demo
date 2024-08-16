@@ -1,12 +1,67 @@
 package com.javalearning.streams;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class Driver {
-	public static void main(String[] args) {
+	public static void main(String[] args){
+		
+		
+		//read a .txt file using java8
+		
+		Stream<String> linesStream;
+		/*
+		 * try { linesStream =
+		 * Files.lines(Paths.get("D:\\Malreddy\\Training Institute\\git tutorial.txt"));
+		 * linesStream.forEach(System.out::println); } catch (IOException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
+		 */
+		//memory leaks will be handled by try with resources.
+		try(Stream<String> lineStream= Files.lines(Paths.get("D:\\Malreddy\\Training Institute\\git tutorial.txt"))){
+			lineStream.forEach(System.out::println);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		/*
+		List<String> empNames = Arrays.asList("Malreddy","Nasira",null,"Anusha","Amar","Meena");
+
+		empNames.stream()
+		.filter(Objects::nonNull)
+		.map(e->e.toUpperCase()).forEach(System.out::println);
+	
+		
+		//Method Refference Class::method
+		// 1.Instance 2.constructor and 3.static
+		List<Employee> empList = Employee.getEmployees();
+		//print empIds
+		//empList.stream().map(emp->emp.getId()).forEach(e->System.out.println(e));
+		empList.stream().map(Employee::getId).forEach(System.out::println);
+		
+		
+		//create List<Employee>
+		//List<Employee> emps=empNames.stream().map(name->new Employee(name)).collect(Collectors.toList());
+		List<Employee> emps=empNames.stream().map(Employee::new).collect(Collectors.toList());
+		System.out.println(emps);
+		
+		//print uppercase of emp names
+		//empList.stream().forEach(e->System.out.println(e.getName().toUpperCase()));
+		List<String> empNamesUpper=empList.stream()
+				.filter(e->e.getName()!= null)
+				.map(Employee::upper).collect(Collectors.toList());
+		System.out.println(empNamesUpper);
+		
+		
+		//ParallelStream
+		List<Integer> nums = Arrays.asList(101,304,605,507,786,951,1001,1189,207,302,156,99,86,11,9,6);
+		List<Integer> numsGt300 =  nums.stream().sorted()
+				.filter(n->n>300).collect(Collectors.toList());
+		System.out.println(numsGt300);
+		
+		List<Integer> numsGt300Parallel =  nums.parallelStream().filter(n->n>300).collect(Collectors.toList());
+		System.out.println(numsGt300Parallel);
 		
 		
 		List<Integer> intList1 = Arrays.asList(1,2,3);
@@ -27,10 +82,20 @@ public class Driver {
 				Arrays.asList("O", "R", "G"),
 				Arrays.asList("E", "E", "K", "S"));
 		
-		Set<String> flattenedListString = listOfListString.stream().flatMap(list->list.stream()).collect(Collectors.toSet());
+		Set<String> flattenedListString = listOfListString.stream()
+				.flatMap(Collection::stream)
+				.collect(Collectors.toSet());
 		System.out.println(flattenedListString);
 		
-		/*
+		List<Employee> empList = Employee.getEmployees();
+
+		
+		List<String> names= empList.stream().map(e->e.getName()).collect(Collectors.toList());
+		List<String> namesUpper = names.stream().map(String::toUpperCase).collect(Collectors.toList());
+		System.out.println(namesUpper);
+		
+		
+		
 		List<Employee> empList = Employee.getEmployees();
 		
 		List<EmployeeDto> empDtoList = empList.stream().map(emp->new EmployeeDto(emp.getId(), emp.getName(), emp.getSalary())).collect(Collectors.toList());
