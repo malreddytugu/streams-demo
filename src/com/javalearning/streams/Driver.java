@@ -1,12 +1,39 @@
 package com.javalearning.streams;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Driver {
-	public static void main(String[] args){
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
 		
+		String str ="welcome to Java Programming";
+		
+		for (int i = str.length()-1; i >0; i--) {
+			System.out.print(str.charAt(i));
+		}
+		
+		// emoclew ot avaJ gnimmargorP
+		
+		String[] words = str.split(" ");
+		
+		List<String> reversedStrList =Arrays.asList(words).stream().map(word->new StringBuffer(word).reverse().toString()).collect(Collectors.toList());
+		System.out.println(reversedStrList);
+		//eliminate duplicates
+		List<Integer> intList = Arrays.asList(1,2,3,4,5,4,5,6,7,7,9,8);
+		
+		List<Integer> intListDistinct = intList.stream().distinct().collect(Collectors.toList());
+		System.out.println(intListDistinct);
+		
+		List<String> names=Arrays.asList("Malreddy","Keerthi","Nasira","Amanbi","Ananth","Malreddy","Keerthi");
+		List<String> uniqueNames=names.stream().distinct().collect(Collectors.toList());
+		System.out.println(uniqueNames);
+		
+		List<String> namesSortedByLength = names.stream().distinct().sorted(Comparator.comparingInt(String::length)).collect(Collectors.toList());
+		System.out.println(namesSortedByLength);
 		
 		//read a .txt file using java8
 		
@@ -17,7 +44,18 @@ public class Driver {
 		 * linesStream.forEach(System.out::println); } catch (IOException e) { // TODO
 		 * Auto-generated catch block e.printStackTrace(); }
 		 */
+		/*
+		try {
+			linesStream = Files.lines(Paths.get("D:\\Malreddy\\Training Institute\\git tutorial.txt"));
+			linesStream.forEach(line->System.out.println(line));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//memory leaks will be handled by try with resources.
+		
 		try(Stream<String> lineStream= Files.lines(Paths.get("D:\\Malreddy\\Training Institute\\git tutorial.txt"))){
 			lineStream.forEach(System.out::println);
 			
@@ -25,6 +63,7 @@ public class Driver {
 			e.printStackTrace();
 		}
 		
+		*/
 		/*
 		List<String> empNames = Arrays.asList("Malreddy","Nasira",null,"Anusha","Amar","Meena");
 
