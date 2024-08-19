@@ -2,14 +2,131 @@ package com.javalearning.streams;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
+import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import com.javalearning.streams.model.Employee;
 
 public class Driver {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		
+		List<Employee> empList = Employee.getEmployees();
+
+		// sort the employees by name
+		empList.stream().filter(e -> e.getName() != null).sorted((e1, e2) -> e1.getName().compareTo(e2.getName()))
+				.forEach(System.out::println);
+
+		// last element in the list
+		Employee lastEmployee = empList.stream().skip(empList.size() - 1).findFirst().get();
+		System.out.println("last element in the emp list is :: " + lastEmployee);
+
+		Stream<Integer> infiniteStream = Stream.iterate(2, i -> i * 2);
+		// infiniteStream.skip(2).limit(5).forEach(System.out::println); // 2 4 8 16 32
+		// 64 128
+		infiniteStream.limit(5).forEach(System.out::println);
+
+		// int--primitive Integer--wrapper class--Object
+
+		Stream<Integer> intgerStream = Stream.of(1, 2, 3, 4, 5, 6);
+		intgerStream.forEach(System.out::println);
+
+		System.out.println("Dealing with primitive data in Streams");
+		IntStream intStream = IntStream.of(7, 8, 9, 10);
+		// intStream.forEach(System.out::println);
+		System.out.println(intStream.min().getAsInt());
+
+		double max = DoubleStream.of(1.5, 2.7, 3.8, 4.9, 5.1).max().getAsDouble();
+		System.out.println(max);
+
+		double sum = DoubleStream.of(1.5, 2.7, 3.8, 4.9, 5.1).sum();
+		System.out.println("sum : " + sum);
+
+		double avg = DoubleStream.of(1.5, 2.7, 3.8, 4.9, 5.1).average().getAsDouble();
+		System.out.println("Average : " + avg);
+
+		Employee latest = empList.stream().min((e1, e2) -> e2.getId() - e1.getId())
+				.orElseThrow(NoSuchElementException::new);
+
+		System.out.println(latest);
+
+		Employee maxSalEmp = empList.stream().max(Comparator.comparing(Employee::getSalary))
+				.orElseThrow(NoSuchElementException::new);
+
+		System.out.println("maxSalariedEmployee : " + maxSalEmp);
+
+		// allMatch anyMatch noneMatch
+
+		List<Integer> integerList = Arrays.asList(2, 4, 5, 6, 8, 10);
+
+		System.out.println("is all numbers are even : " + integerList.stream().allMatch(n -> n % 2 == 0));
+		System.out.println("is all numbers are even : " + integerList.stream().anyMatch(n -> n % 2 == 0));
+		System.out.println("is all numbers are even : " + integerList.stream().noneMatch(n -> n % 2 == 0));
+
+		System.out.println("IntStream.range(1,11)");
+		IntStream.range(1, 11).forEach(System.out::println);
+		System.out.println("IntStream.rangeClosed(1,10)");
+		IntStream.rangeClosed(1, 10).forEach(System.out::println);
+
+		IntStream finalIntStream = IntStream.concat(IntStream.of(1, 2, 3), IntStream.of(4, 5, 6));
+		System.out.println("IntStream.concat");
+		finalIntStream.forEach(System.out::println);
+
+		// map returns Stream<Integer> not IntStream
+		System.out.println("map returns Stream<Object>");
+		Stream<Integer> integerStream = empList.stream().map(Employee::getId);
+		integerStream.forEach(System.out::println);
+
+		// mapToInt--->IntStream
+		System.out.println("mapToInt");
+		IntStream intStream1 = empList.stream().mapToInt(Employee::getId);
+		intStream1.forEach(System.out::println);
+
+		// reduction
+		double sumSal = empList.stream().mapToDouble(Employee::getSalary).reduce(0.0, Double::sum);
+		System.out.println(sumSal);
+		
+		
+		String empNamesJoiningByComma = empList.stream().filter(e->e.getName()!=null).map(Employee::getName).collect(Collectors.joining(","));
+		System.out.println(empNamesJoiningByComma);
+		
+		Vector<String> empVector = empList.stream().map(Employee::getName).collect(Collectors.toCollection(Vector::new));
+		System.out.println(empVector); 
+		
+		//Non-thread safe ThreadSafe
+		//ArrayList			Vector
+		//HashMap           HashTable
+		
+
+		DoubleSummaryStatistics stats = empList.stream()
+	      .collect(Collectors.summarizingDouble(Employee::getSalary));
+		
+		System.out.println("Min Salary : "+stats.getMin());
+		System.out.println("Max salary :"+stats.getMax());
+		System.out.println("Average : "+stats.getAverage());
+		System.out.println("Sum : "+stats.getSum());
+		System.out.println("Count : "+stats.getCount());
+		
+		
+		IntSummaryStatistics intSummaryStatistics = IntStream.rangeClosed(1, 10).summaryStatistics();
+		System.out.println(intSummaryStatistics);
+		System.out.println(intSummaryStatistics.getMin());
+		System.out.println(intSummaryStatistics.getMax());
+		System.out.println(intSummaryStatistics.getAverage());
+		System.out.println(intSummaryStatistics.getCount());
+		System.out.println(intSummaryStatistics.getSum());
+		
+		IntSummaryStatistics integerSummary= Arrays.asList(1,2,3,4,5).stream().collect(Collectors.summarizingInt(e->e));
+		System.out.println(integerSummary);
+		
+		/*
 		String str ="welcome to Java Programming";
 		
 		for (int i = str.length()-1; i >0; i--) {
@@ -38,6 +155,8 @@ public class Driver {
 		//read a .txt file using java8
 		
 		Stream<String> linesStream;
+		
+		*/
 		/*
 		 * try { linesStream =
 		 * Files.lines(Paths.get("D:\\Malreddy\\Training Institute\\git tutorial.txt"));
