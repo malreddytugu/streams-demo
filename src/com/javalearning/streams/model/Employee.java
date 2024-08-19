@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Employee {
 
-	private long id;
+	private int id;
 	private String name;
 	private double salary;
 
@@ -22,7 +22,7 @@ public class Employee {
 	 * @param name
 	 * @param salary
 	 */
-	public Employee(long id, String name, double salary) {
+	public Employee(int id, String name, double salary) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -44,16 +44,16 @@ public class Employee {
 		employees.add(new Employee(109, "Nasira", 200000));
 		employees.add(new Employee(103, "Kanil", 105000));
 		employees.add(new Employee(105, "Anusha", 250000));
-		employees.add(new Employee(101, null, 100000));
+		//employees.add(new Employee(101, null, 100000));
 		return employees;
 
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
