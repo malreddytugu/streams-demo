@@ -44,6 +44,7 @@ public class Employee {
 		employees.add(new Employee(109, "Nasira", 200000));
 		employees.add(new Employee(103, "Kanil", 105000));
 		employees.add(new Employee(105, "Anusha", 250000));
+		employees.add(new Employee(107, "Amar", 250000));
 		//employees.add(new Employee(101, null, 100000));
 		return employees;
 

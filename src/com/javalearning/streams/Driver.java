@@ -2,14 +2,11 @@ package com.javalearning.streams;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.DoubleSummaryStatistics;
-import java.util.IntSummaryStatistics;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Vector;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.javalearning.streams.model.Employee;
@@ -18,8 +15,44 @@ public class Driver {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		
+		
+		List<Integer> nums = Arrays.asList(1,2,3); // 2 4 6
+		//partitioningBy groupingBy
+		
+		Map<Boolean, List<Integer>> oddEvenMap = nums.stream().collect(Collectors.partitioningBy(n->n%2==0));
+		oddEvenMap.keySet().forEach(System.out::println);
+		oddEvenMap.values().forEach(System.out::println);
+		
 		List<Employee> empList = Employee.getEmployees();
-
+		Map<Character, List<Employee>> empMapByStartingCharacter = empList.stream().collect(Collectors.groupingBy(emp->emp.getName().charAt(0)));
+		empMapByStartingCharacter.keySet().forEach(System.out::println);
+		empMapByStartingCharacter.values().forEach(System.out::println);
+		
+		Map<Character, List<Integer>> empByFirstCharacterWithIds = empList.stream().collect(Collectors.groupingBy(emp->new Character(emp.getName().charAt(0)),Collectors.mapping(Employee::getId, Collectors.toList())));
+		System.out.println(empByFirstCharacterWithIds);
+		
+		
+		Integer sum = nums.stream().reduce((n1,n2)->n1+n2).get();
+		System.out.println(sum);
+		
+		
+		Integer doubleAndSum = nums.stream().collect(Collectors.reducing(0,n->n*2,(n1,n2)->n1+n2));
+		System.out.println(doubleAndSum);
+		
+		Comparator<Employee> byNameLength = Comparator.comparing(Employee::getName);
+		
+		Map<Character, Optional<Employee>> empMapBylonegstName = empList.stream().collect(Collectors.groupingBy(emp->new Character(emp.getName().charAt(0)),Collectors.reducing(BinaryOperator.maxBy(byNameLength))));
+		System.out.println(empMapBylonegstName);
+		
+		System.out.println("Stream.generate");
+		Stream.generate(Math::random)
+		.limit(5)
+		.forEach(System.out::println);
+		
+		System.out.println("Stream.iterate");
+		Stream.iterate(2, n->n*2).limit(5).forEach(System.out::println);
+		
+		/*
 		// sort the employees by name
 		empList.stream().filter(e -> e.getName() != null).sorted((e1, e2) -> e1.getName().compareTo(e2.getName()))
 				.forEach(System.out::println);
@@ -125,6 +158,8 @@ public class Driver {
 		
 		IntSummaryStatistics integerSummary= Arrays.asList(1,2,3,4,5).stream().collect(Collectors.summarizingInt(e->e));
 		System.out.println(integerSummary);
+		
+		*/
 		
 		/*
 		String str ="welcome to Java Programming";
