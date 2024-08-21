@@ -1,21 +1,109 @@
 package com.javalearning.streams;
 
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.BinaryOperator;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.javalearning.streams.model.Employee;
+
 
 public class Driver {
-	@SuppressWarnings("resource")
+	
+	public static Map<String,Long> sortByValue(Map<String,Long> namesMapByCount){
+
+		return namesMapByCount.entrySet()
+						.stream()
+						.sorted((e1,e2)->e2.getValue().compareTo(e1.getValue()))
+						.collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e2,LinkedHashMap::new));
+	}
 	public static void main(String[] args) {
 		
+		Long count = Stream.of(1,2,3,4,5)
+		.collect(Collectors.counting());
+		System.out.println("Collectors.counting()"+count);
+
+		System.out.println("stream.count()"+Stream.of(1,2,3,4,5)
+				.count());
 		
+		Set<Integer> res = Stream.of(1, 2, 3, 4, 5, 5, 5)
+				.collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
+		System.out.println(res);
+
+		Stream<Integer> numberStream = Stream.of(1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5,1,2,3);
+		Map<Integer, Long> numberFrequencyMap = numberStream
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+		System.out.println(numberFrequencyMap);
+		
+		List<String> names = Arrays.asList("Malreddy", "Amar", "Keerthi", "Nasira", "Malreddy", "Keerthi", "Nasira",
+				"Amar", "Malreddy", "Nasira", "Nasira");
+		Map<String, Long> namesByCountMap= names.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+		System.out.println(namesByCountMap);
+		
+		Map<String,Long> sortedMap= namesByCountMap.entrySet()
+		.stream()
+		//.sorted(Map.Entry.<String,Long>comparingByValue().reversed())
+		.sorted((e1,e2)->e2.getValue().compareTo(e1.getValue())) //comparator
+		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(e1,e2)->e2,LinkedHashMap::new));
+		System.out.println(sortedMap);
+		
+		/*
+		//iterate with limit
+		Stream.iterate(2, i->i+2)
+		.limit(6)
+		.forEach(System.out::println);
+		
+		  System.out.println("filter"); //iterate with filter 
+		  Stream.iterate(2, i->i+2)
+		  .filter(n->n<=10).map(n->n*n).forEach(System.out::println);
+		 
+		//iterate with condition 1.9
+		System.out.println("Iterate with condition");
+		Stream.iterate(2,i->i<=10,i->i+2)
+		.forEach(System.out::println);
+		
+		//iterate with takeWhile
+		System.out.println("takeWhile with iterator");
+		Stream.iterate(2,i->i+2)
+		.takeWhile(i->i<=10)
+		.forEach(System.out::println);
+		
+		
+
+		System.out.println("takeWhile Stream.of");
+		Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+				.takeWhile(x -> x <= 5)
+				.forEach(System.out::println);
+		
+		System.out.println("filter Stream.of");
+		Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+				.filter(x -> x <= 5)
+				.forEach(System.out::println);
+		
+		//iterate with dropWhile
+		System.out.println("dropWhile Stream.of");
+		Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+				.dropWhile(x -> x <= 5)
+				.forEach(System.out::println);
+		
+		Integer number = null;
+		Stream.of(number);
+		
+		System.out.println("Stream.of(null)");
+		Stream<Integer> result = number != null ? Stream.of(number) : Stream.empty();
+		result.forEach(System.out::println);
+		
+		System.out.println("Stream.ofNullable(number)");
+		result = Stream.ofNullable(number);
+		result.forEach(System.out::println);
+		
+		*/
+		
+		/*
 		List<Integer> nums = Arrays.asList(1,2,3); // 2 4 6
 		//partitioningBy groupingBy
 		
@@ -52,7 +140,7 @@ public class Driver {
 		System.out.println("Stream.iterate");
 		Stream.iterate(2, n->n*2).limit(5).forEach(System.out::println);
 		
-		/*
+		
 		// sort the employees by name
 		empList.stream().filter(e -> e.getName() != null).sorted((e1, e2) -> e1.getName().compareTo(e2.getName()))
 				.forEach(System.out::println);
