@@ -1,7 +1,6 @@
 package com.javalearning.streams;
 // Java Program to demonstrate use
 // of System.nanoTime() method
-import java.io.*;
 
 // Driver class
 public class ExecutionTimeExample {
