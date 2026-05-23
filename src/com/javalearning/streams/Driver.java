@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import com.javalearning.streams.model.Employee;
 
 public class Driver {
-	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		
 		
@@ -28,7 +27,7 @@ public class Driver {
 		empMapByStartingCharacter.keySet().forEach(System.out::println);
 		empMapByStartingCharacter.values().forEach(System.out::println);
 		
-		Map<Character, List<Integer>> empByFirstCharacterWithIds = empList.stream().collect(Collectors.groupingBy(emp->new Character(emp.getName().charAt(0)),Collectors.mapping(Employee::getId, Collectors.toList())));
+		Map<Character, List<Long>> empByFirstCharacterWithIds = empList.stream().collect(Collectors.groupingBy(emp->emp.getName().charAt(0),Collectors.mapping(Employee::getId, Collectors.toList())));
 		System.out.println(empByFirstCharacterWithIds);
 		
 		
@@ -41,7 +40,7 @@ public class Driver {
 		
 		Comparator<Employee> byNameLength = Comparator.comparing(Employee::getName);
 		
-		Map<Character, Optional<Employee>> empMapBylonegstName = empList.stream().collect(Collectors.groupingBy(emp->new Character(emp.getName().charAt(0)),Collectors.reducing(BinaryOperator.maxBy(byNameLength))));
+		Map<Character, Optional<Employee>> empMapBylonegstName = empList.stream().collect(Collectors.groupingBy(emp->emp.getName().charAt(0),Collectors.reducing(BinaryOperator.maxBy(byNameLength))));
 		System.out.println(empMapBylonegstName);
 		
 		System.out.println("Stream.generate");
